@@ -8,17 +8,24 @@ let package = Package(
   defaultLocalization: "en",
   platforms: [.iOS(.v15)],
   products: [
+    .library(name: "NewsApp", targets: ["NewsApp"]),
     .library(
-      name: "NewsApp",
-      targets: ["NewsApp"]
+      name: "LaunchFeature",
+      targets: ["LaunchFeature"]
+    ),
+    .library(
+      name: "NewsUI",
+      targets: ["NewsUI"]
     )
   ],
   targets: [
+    .target(name: "NewsApp"),
     .target(
-      name: "NewsApp"),
-    .testTarget(
-      name: "NewsAppTests",
-      dependencies: ["NewsApp"]
+      name: "LaunchFeature",
+      dependencies: ["NewsUI"]
+    ),
+    .target(
+      name: "NewsUI"
     )
   ]
 )
