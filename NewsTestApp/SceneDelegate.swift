@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import NewsApp
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
   var window: UIWindow?

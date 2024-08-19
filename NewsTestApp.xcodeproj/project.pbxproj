@@ -12,6 +12,7 @@
 		A3191EE92C73893900E28E65 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3191EE82C73893900E28E65 /* ViewController.swift */; };
 		A3191EEE2C73893B00E28E65 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A3191EED2C73893B00E28E65 /* Assets.xcassets */; };
 		A3191EF12C73893B00E28E65 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A3191EEF2C73893B00E28E65 /* LaunchScreen.storyboard */; };
+		A359EBDF2C7394B80020772F /* NewsApp in Frameworks */ = {isa = PBXBuildFile; productRef = A359EBDE2C7394B80020772F /* NewsApp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		A3191EED2C73893B00E28E65 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A3191EF02C73893B00E28E65 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A3191EF22C73893B00E28E65 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A359EBDC2C7393EF0020772F /* NewsApp */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = NewsApp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,6 +31,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A359EBDF2C7394B80020772F /* NewsApp in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -38,8 +41,10 @@
 		A3191ED82C73893900E28E65 = {
 			isa = PBXGroup;
 			children = (
+				A359EBDC2C7393EF0020772F /* NewsApp */,
 				A3191EE32C73893900E28E65 /* NewsTestApp */,
 				A3191EE22C73893900E28E65 /* Products */,
+				A359EBDD2C7394B80020772F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -64,6 +69,13 @@
 			path = NewsTestApp;
 			sourceTree = "<group>";
 		};
+		A359EBDD2C7394B80020772F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -81,6 +93,9 @@
 			dependencies = (
 			);
 			name = NewsTestApp;
+			packageProductDependencies = (
+				A359EBDE2C7394B80020772F /* NewsApp */,
+			);
 			productName = NewsTestApp;
 			productReference = A3191EE12C73893900E28E65 /* NewsTestApp.app */;
 			productType = "com.apple.product-type.application";
@@ -384,6 +399,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A359EBDE2C7394B80020772F /* NewsApp */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = NewsApp;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A3191ED92C73893900E28E65 /* Project object */;
 }
