@@ -11,6 +11,7 @@ import NewsCore
 final class AppDIContainer {
   let window: UIWindow
   var currentCoordinator: Coordinator?
+  let newsAPIKey = "e7736929385449b69620d8fb9762f1e0"
   private(set) lazy var navigationController = UINavigationController()
 
   init(
