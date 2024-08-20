@@ -7,30 +7,19 @@
 
 import Foundation
 
-public final class DataTransferService {
+public final class DataTransferService: DataTransferServiceInterface {
   private let networkService: NetworkServiceInterface
 
+  // MARK: - Init
   public init(networkService: NetworkServiceInterface) {
     self.networkService = networkService
   }
 
-  private func resolve(networkError error: NetworkError) -> DataTransferError {
-    .networkFailure(error)
-  }
-
-  private func decode<T: Decodable>(data: Data) throws -> T {
-    do {
-      let result = try JSONDecoder().decode(T.self, from: data)
-      return result
-    } catch {
-      throw DataTransferError.parsing(error)
-    }
-  }
-
-  public func request<T, E>(
+  // MARK: - Public methods
+  public func request<T: Decodable, E: ResponseRequestable>(
     with endpoint: E,
     resultHandler: @escaping (Result<T, DataTransferError>) -> Void
-  ) where T: Decodable, T == E.Response, E: ResponseRequestable {
+  ) where T == E.Response {
     networkService.request(endpoint: endpoint) { result in
       switch result {
       case let .success(data):
@@ -55,6 +44,20 @@ public final class DataTransferService {
         // TODO: handle errors
         resultHandler(.failure(transferError))
       }
+    }
+  }
+
+  // MARK: - Private methods
+  private func resolve(networkError error: NetworkError) -> DataTransferError {
+    .networkFailure(error)
+  }
+
+  private func decode<T: Decodable>(data: Data) throws -> T {
+    do {
+      let result = try JSONDecoder().decode(T.self, from: data)
+      return result
+    } catch {
+      throw DataTransferError.parsing(error)
     }
   }
 }

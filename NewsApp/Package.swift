@@ -44,6 +44,7 @@ let package = Package(
       dependencies: [
         "NewsUI",
         "NewsCore",
+        "NetworkingService",
         "LaunchFeature",
         "NewsFeedFeature"
       ]

@@ -30,8 +30,8 @@ final class LaunchController: BaseController {
     configureLayout()
   }
 
-  override func viewDidAppear(_ animated: Bool) {
-    super.viewDidAppear(animated)
+  override func singleDidAppear() {
+    super.singleDidAppear()
     launchFinishedAnimation()
   }
 }

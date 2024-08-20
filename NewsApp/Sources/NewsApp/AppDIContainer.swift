@@ -8,6 +8,7 @@
 import UIKit
 import NewsCore
 import NewsUI
+import NetworkingService
 
 final class AppDIContainer {
   let window: UIWindow
@@ -17,6 +18,18 @@ final class AppDIContainer {
     let controller = UINavigationController()
     controller.navigationBar.setupTransparentNavBar()
     return controller
+  }()
+
+  private(set) lazy var dataTransferService: DataTransferService = {
+    let networkingConfiguration = ApiDataNetworkConfig(
+      baseURL: URL(
+        string: "https://newsapi.org/v2/"
+      )!,
+      headers: ["Authorization": newsAPIKey]
+    )
+    let networkingService = NetworkingService(configuration: networkingConfiguration)
+
+    return DataTransferService(networkService: networkingService)
   }()
 
   init(

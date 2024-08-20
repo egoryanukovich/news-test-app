@@ -37,7 +37,8 @@ private extension Module {
 
   func showNewsFeed() {
     let coordinator = NewsFeedCoordinator(
-      navigationController: diContainer.navigationController
+      navigationController: diContainer.navigationController,
+      dataTransferService: diContainer.dataTransferService
     )
     coordinator.finishAction = { [weak self] in
       self?.diContainer.currentCoordinator = nil

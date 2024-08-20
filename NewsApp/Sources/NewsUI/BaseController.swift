@@ -8,6 +8,9 @@
 import UIKit
 
 open class BaseController: UIViewController {
+  private var willAppearOnce = false
+  private var didAppearOnce = false
+
   // MARK: - Init
   public init() {
     super.init(nibName: nil, bundle: nil)
@@ -40,4 +43,26 @@ open class BaseController: UIViewController {
       "Loading this view controller from a nib is unsupported"
     )
   }
+
+  // MARK: - Lifecycle
+  open override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+
+    if !willAppearOnce {
+      singleWillAppear()
+      willAppearOnce = true
+    }
+  }
+
+  open override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+
+    if !didAppearOnce {
+      singleDidAppear()
+      didAppearOnce = true
+    }
+  }
+
+  open func singleWillAppear() {}
+  open func singleDidAppear() {}
 }
