@@ -9,6 +9,6 @@ import Foundation
 
 @MainActor
 public protocol Coordinator: AnyObject {
-  func start()
   var finishAction: (() -> Void)? { get set }
+  func start()
 }

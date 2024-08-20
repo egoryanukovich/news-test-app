@@ -20,6 +20,10 @@ let package = Package(
     .library(
       name: "LaunchFeature",
       targets: ["LaunchFeature"]
+    ),
+    .library(
+      name: "NewsFeedFeature",
+      targets: ["NewsFeedFeature"]
     )
   ],
   dependencies: [
@@ -33,14 +37,25 @@ let package = Package(
   targets: [
     .target(
       name: "NewsApp",
-      dependencies: ["LaunchFeature"]
+      dependencies: [
+        "NewsUI",
+        "NewsCore",
+        "LaunchFeature",
+        "NewsFeedFeature"
+      ]
     ),
-    .target(
-      name: "NewsUI"
-    ),
+    .target(name: "NewsUI"),
     .target(name: "NewsCore"),
     .target(
       name: "LaunchFeature",
+      dependencies: [
+        "NewsUI",
+        "NewsCore",
+        "SnapKit"
+      ]
+    ),
+    .target(
+      name: "NewsFeedFeature",
       dependencies: [
         "NewsUI",
         "NewsCore",

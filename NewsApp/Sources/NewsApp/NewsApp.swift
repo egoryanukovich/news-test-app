@@ -1,6 +1,6 @@
 import UIKit
-import NewsCore
 import LaunchFeature
+import NewsFeedFeature
 
 @MainActor
 final public class Module {
@@ -25,6 +25,18 @@ private extension Module {
 
   func showLaunchScreen() {
     let coordinator = LaunchCoordinator(
+      navigationController: diContainer.navigationController
+    )
+    coordinator.finishAction = { [weak self] in
+      self?.diContainer.currentCoordinator = nil
+      self?.showNewsFeed()
+    }
+    coordinator.start()
+    diContainer.currentCoordinator = coordinator
+  }
+
+  func showNewsFeed() {
+    let coordinator = NewsFeedCoordinator(
       navigationController: diContainer.navigationController
     )
     coordinator.finishAction = { [weak self] in
