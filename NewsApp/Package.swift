@@ -18,6 +18,10 @@ let package = Package(
       targets: ["NewsCore"]
     ),
     .library(
+      name: "NetworkingService",
+      targets: ["NetworkingService"]
+    ),
+    .library(
       name: "LaunchFeature",
       targets: ["LaunchFeature"]
     ),
@@ -46,6 +50,7 @@ let package = Package(
     ),
     .target(name: "NewsUI"),
     .target(name: "NewsCore"),
+    .target(name: "NetworkingService"),
     .target(
       name: "LaunchFeature",
       dependencies: [
