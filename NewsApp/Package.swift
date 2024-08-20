@@ -10,22 +10,42 @@ let package = Package(
   products: [
     .library(name: "NewsApp", targets: ["NewsApp"]),
     .library(
-      name: "LaunchFeature",
-      targets: ["LaunchFeature"]
-    ),
-    .library(
       name: "NewsUI",
       targets: ["NewsUI"]
+    ),
+    .library(
+      name: "NewsCore",
+      targets: ["NewsCore"]
+    ),
+    .library(
+      name: "LaunchFeature",
+      targets: ["LaunchFeature"]
+    )
+  ],
+  dependencies: [
+    .package(
+      url: "https://github.com/SnapKit/SnapKit.git",
+      .upToNextMajor(
+        from: "5.0.1"
+      )
     )
   ],
   targets: [
-    .target(name: "NewsApp"),
     .target(
-      name: "LaunchFeature",
-      dependencies: ["NewsUI"]
+      name: "NewsApp",
+      dependencies: ["LaunchFeature"]
     ),
     .target(
       name: "NewsUI"
+    ),
+    .target(name: "NewsCore"),
+    .target(
+      name: "LaunchFeature",
+      dependencies: [
+        "NewsUI",
+        "NewsCore",
+        "SnapKit"
+      ]
     )
   ]
 )
