@@ -7,16 +7,22 @@
 
 import Foundation
 
-struct ArticleModel: ArticleMainScreenModel {
+struct ArticleModel: ArticleMainScreenModel, Hashable, Identifiable {
+  let id: UUID
   let title: String
   let description: String
   let imageUrl: URL
   let content: String
   let publishedAt: String
+
+  func hash(into hasher: inout Hasher) {
+    hasher.combine(id)
+  }
 }
 
 extension ArticleModel {
   init(from model: ArticleResponseModel, imageUrl: URL) {
+    id = UUID()
     title = model.title
     description = model.description
     self.imageUrl = imageUrl

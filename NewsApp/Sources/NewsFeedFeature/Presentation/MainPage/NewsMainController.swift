@@ -9,9 +9,16 @@ import UIKit
 import NewsUI
 import NetworkingService
 
+enum Section {
+  case main
+}
+
 final class NewsMainController: BaseController {
   var showDetails: ((ArticleModel) -> Void)?
+  typealias DataSource = UITableViewDiffableDataSource<Section, ArticleModel.ID>
+  typealias Snapshot = NSDiffableDataSourceSnapshot<Section, ArticleModel.ID>
 
+  private lazy var dataSource = configureDataSource()
   private let viewModel: NewsMainViewModel
 
   private lazy var tableView: UITableView = {
@@ -20,7 +27,6 @@ final class NewsMainController: BaseController {
     table.backgroundColor = .clear
     table.separatorStyle = .none
     table.allowsSelection = true
-    table.dataSource = self
     table.delegate = self
     table.register(
       NewsFeedCell.self,
@@ -50,6 +56,7 @@ final class NewsMainController: BaseController {
 private extension NewsMainController {
   func configureView() {
     title = "News"
+    tableView.dataSource = dataSource
   }
 
   func configureLayout() {
@@ -59,6 +66,20 @@ private extension NewsMainController {
     }
   }
 
+  func configureDataSource() -> DataSource {
+    let datasource = DataSource(tableView: tableView) { tableView, indexPath, itemIdentifier in
+      guard
+        let cell: NewsFeedCell = tableView.dequeueCell(for: indexPath),
+        let model = self.viewModel.articles[safe: indexPath.row]
+      else { return UITableViewCell() }
+      cell.apply(model)
+      return cell
+    }
+
+    datasource.defaultRowAnimation = .fade
+    return datasource
+  }
+
   func fetchNews() {
     showLoadingView()
     viewModel.fetchNewsFeed { [weak self] result in
@@ -66,7 +87,8 @@ private extension NewsMainController {
         self?.hideLoadingView()
         switch result {
         case .success:
-          self?.tableView.reloadData()
+          self?.updateSnapshot()
+//          self?.tableView.reloadData()
         case let .failure(error):
           self?.showError(error)
         }
@@ -81,7 +103,7 @@ private extension NewsMainController {
         self?.hideLoadingView()
         switch result {
         case .success:
-          self?.tableView.reloadData()
+          self?.updateSnapshot()
         case let .failure(error):
           self?.showError(error)
         }
@@ -89,24 +111,26 @@ private extension NewsMainController {
     }
   }
 
-  // TODO: show error
   func showError(_ error: DataTransferError) {
-    print("EROROR")
+    switch error {
+    case let .parsing(error):
+      showAlert(
+        alertText: "Something went wrong!",
+        alertMessage: "Please, try again later"
+      )
+    case .networkFailure, .resolvedNetworkFailure:
+      showAlert(
+        alertText: "Something went wrong!",
+        alertMessage: "Please, check your internet connection"
+      )
+    }
   }
-}
 
-extension NewsMainController: UITableViewDataSource {
-  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    viewModel.articles.count
-  }
-
-  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    guard
-      let cell: NewsFeedCell = tableView.dequeueCell(for: indexPath),
-      let model = viewModel.articles[safe: indexPath.row]
-    else { return UITableViewCell() }
-    cell.apply(model)
-    return cell
+  func updateSnapshot() {
+    var snapshot = Snapshot()
+    snapshot.appendSections([.main])
+    snapshot.appendItems(viewModel.articles.map { $0.id }, toSection: .main)
+    dataSource.apply(snapshot, animatingDifferences: true)
   }
 }
 
