@@ -91,7 +91,7 @@ private extension NewsMainController {
     guard
       let cell: NewsFeedCell = tableView.dequeueCell(for: indexPath),
       let model = self.viewModel.articles.first(
-        where: { $0.id == itemIdentifier
+        where: { $0.id == item
         }
       )
     else {
