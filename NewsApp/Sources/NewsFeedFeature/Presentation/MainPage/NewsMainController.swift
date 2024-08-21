@@ -1,6 +1,6 @@
 //
 //  NewsMainController.swift
-//  
+//
 //
 //  Created by Egor Yanukovich on 20.08.24.
 //
@@ -15,8 +15,9 @@ enum Section {
 
 final class NewsMainController: BaseController {
   var showDetails: ((ArticleModel) -> Void)?
-  typealias DataSource = UITableViewDiffableDataSource<Section, ArticleModel.ID>
-  typealias Snapshot = NSDiffableDataSourceSnapshot<Section, ArticleModel.ID>
+
+  private typealias DataSource = UITableViewDiffableDataSource<Section, ArticleModel.ID>
+  private typealias Snapshot = NSDiffableDataSourceSnapshot<Section, ArticleModel.ID>
 
   private lazy var dataSource = configureDataSource()
   private let viewModel: NewsMainViewModel
@@ -66,68 +67,62 @@ private extension NewsMainController {
     }
   }
 
-  func configureDataSource() -> DataSource {
-    let datasource = DataSource(tableView: tableView) { tableView, indexPath, itemIdentifier in
+  private func configureDataSource() -> DataSource {
+    let dataSource = DataSource(tableView: tableView) { tableView, indexPath, itemIdentifier in
       guard
         let cell: NewsFeedCell = tableView.dequeueCell(for: indexPath),
-        let model = self.viewModel.articles[safe: indexPath.row]
-      else { return UITableViewCell() }
+        let model = self.viewModel.articles.first(
+          where: { $0.id == itemIdentifier
+          }
+        )
+      else {
+        return UITableViewCell()
+      }
       cell.apply(model)
       return cell
     }
+    dataSource.defaultRowAnimation = .fade
 
-    datasource.defaultRowAnimation = .fade
-    return datasource
+    return dataSource
   }
 
   func fetchNews() {
     showLoadingView()
     viewModel.fetchNewsFeed { [weak self] result in
-      DispatchQueue.main.async {
-        self?.hideLoadingView()
-        switch result {
-        case .success:
-          self?.updateSnapshot()
-        case let .failure(error):
-          self?.showError(error)
-        }
-      }
+      self?.handleFetchResult(result)
     }
   }
 
   func fetchMoreNews() {
     showLoadingView()
     viewModel.fetchMoreNews { [weak self] result in
-      DispatchQueue.main.async {
-        self?.hideLoadingView()
-        switch result {
-        case .success:
-          self?.updateSnapshot()
-        case let .failure(error):
-          self?.showError(error)
-        }
+      self?.handleFetchResult(result)
+    }
+  }
+
+  func handleFetchResult(_ result: Result<Void, DataTransferError>) {
+    DispatchQueue.main.async {
+      self.hideLoadingView()
+      switch result {
+      case .success:
+        self.updateSnapshot()
+      case .failure(let error):
+        self.showError(error)
       }
     }
   }
 
   func showError(_ error: DataTransferError) {
+    let alertMessage: String
     switch error {
     case .parsing:
-      showAlert(
-        alertText: "Something went wrong!",
-        alertMessage: "Please, try again later"
-      )
+      alertMessage = "Something went wrong! Please, try again later."
     case .networkFailure, .resolvedNetworkFailure:
-      showAlert(
-        alertText: "Something went wrong!",
-        alertMessage: "Please, check your internet connection"
-      )
-    case let .api(model):
-      showAlert(
-        alertText: "Something went wrong!",
-        alertMessage: model.message // not correct to print this message to user. Just for test
-      )
+      alertMessage = "Something went wrong! Please, check your internet connection."
+    case .api(let model):
+      alertMessage = model.message // not correct to print this message to user. Just for test
     }
+    showAlert(alertText: "Error", alertMessage: alertMessage)
   }
 
   func updateSnapshot() {
@@ -139,21 +134,12 @@ private extension NewsMainController {
 }
 
 extension NewsMainController: UITableViewDelegate {
-  func tableView(
-    _ tableView: UITableView,
-    didSelectRowAt indexPath: IndexPath
-  ) {
-    guard
-      let article = viewModel.articles[safe: indexPath.row]
-    else { return }
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    guard let article = viewModel.articles[safe: indexPath.row] else { return }
     showDetails?(article)
   }
 
-  func tableView(
-    _ tableView: UITableView,
-    willDisplay cell: UITableViewCell,
-    forRowAt indexPath: IndexPath
-  ) {
+  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
     if indexPath.row == viewModel.articles.count - 2 {
       fetchMoreNews()
     }
