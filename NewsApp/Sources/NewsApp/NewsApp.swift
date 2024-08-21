@@ -6,8 +6,8 @@ import NewsFeedFeature
 final public class Module {
   private let diContainer: AppDIContainer
 
-  public init(window: UIWindow) {
-    diContainer = AppDIContainer(window: window)
+  public init(window: UIWindow, urlString: String) throws {
+    diContainer = try AppDIContainer(window: window, urlString: urlString)
     configureWindow()
   }
 

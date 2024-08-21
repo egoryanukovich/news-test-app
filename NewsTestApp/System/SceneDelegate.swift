@@ -20,7 +20,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     guard let windowScene = (scene as? UIWindowScene) else { return }
     window = UIWindow(windowScene: windowScene)
     guard let window else { return }
-    newsAppModule = NewsApp.Module(window: window)
-    newsAppModule?.launchApp()
+    do {
+      newsAppModule = try NewsApp.Module(
+        window: window,
+        urlString: "https://newsapi.org/v2/"
+      )
+      newsAppModule?.launchApp()
+    } catch {
+      print("Check url correctness")
+    }
   }
 }
