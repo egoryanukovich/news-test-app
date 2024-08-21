@@ -88,7 +88,6 @@ private extension NewsMainController {
         switch result {
         case .success:
           self?.updateSnapshot()
-//          self?.tableView.reloadData()
         case let .failure(error):
           self?.showError(error)
         }
@@ -113,7 +112,7 @@ private extension NewsMainController {
 
   func showError(_ error: DataTransferError) {
     switch error {
-    case let .parsing(error):
+    case .parsing:
       showAlert(
         alertText: "Something went wrong!",
         alertMessage: "Please, try again later"
@@ -122,6 +121,11 @@ private extension NewsMainController {
       showAlert(
         alertText: "Something went wrong!",
         alertMessage: "Please, check your internet connection"
+      )
+    case let .api(model):
+      showAlert(
+        alertText: "Something went wrong!",
+        alertMessage: model.message // not correct to print this message to user. Just for test
       )
     }
   }

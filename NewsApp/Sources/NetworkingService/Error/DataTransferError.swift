@@ -9,6 +9,12 @@ import Foundation
 
 public enum DataTransferError: Error {
   case parsing(Error)
+  case api(NewsApiErrorModel)
   case networkFailure(NetworkError)
   case resolvedNetworkFailure(Error)
+}
+
+public struct NewsApiErrorModel: Decodable {
+  let status: String
+  public let message: String
 }

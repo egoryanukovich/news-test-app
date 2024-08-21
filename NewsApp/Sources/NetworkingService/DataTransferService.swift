@@ -40,9 +40,17 @@ public final class DataTransferService: DataTransferServiceInterface {
           }
         }
       case let .failure(error):
-        let transferError = self.resolve(networkError: error)
-        // TODO: handle errors
-        resultHandler(.failure(transferError))
+        if case let .error(_, data) = error {
+          do {
+            let result: NewsApiErrorModel = try self.decode(data: data)
+            resultHandler(.failure(.api(result)))
+          } catch {
+            resultHandler(.failure(.resolvedNetworkFailure(error)))
+          }
+        } else {
+          let transferError = self.resolve(networkError: error)
+          resultHandler(.failure(transferError))
+        }
       }
     }
   }
