@@ -70,8 +70,7 @@ private extension NewsMainController {
   private func configureDataSource() -> DataSource {
     let dataSource = DataSource(
       tableView: tableView
-    ) {
-      [weak self] tableView, indexPath, itemIdentifier in
+    ) { [weak self] tableView, indexPath, itemIdentifier in
       self?.cell(
         for: tableView,
         indexPath: indexPath,
