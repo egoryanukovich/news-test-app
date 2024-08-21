@@ -68,22 +68,37 @@ private extension NewsMainController {
   }
 
   private func configureDataSource() -> DataSource {
-    let dataSource = DataSource(tableView: tableView) { tableView, indexPath, itemIdentifier in
-      guard
-        let cell: NewsFeedCell = tableView.dequeueCell(for: indexPath),
-        let model = self.viewModel.articles.first(
-          where: { $0.id == itemIdentifier
-          }
-        )
-      else {
-        return UITableViewCell()
-      }
-      cell.apply(model)
-      return cell
+    let dataSource = DataSource(
+      tableView: tableView
+    ) {
+      [weak self] tableView, indexPath, itemIdentifier in
+      self?.cell(
+        for: tableView,
+        indexPath: indexPath,
+        item: itemIdentifier
+      )
     }
     dataSource.defaultRowAnimation = .fade
 
     return dataSource
+  }
+
+  func cell(
+    for tableView: UITableView,
+    indexPath: IndexPath,
+    item: ArticleModel.ID
+  ) -> UITableViewCell {
+    guard
+      let cell: NewsFeedCell = tableView.dequeueCell(for: indexPath),
+      let model = self.viewModel.articles.first(
+        where: { $0.id == itemIdentifier
+        }
+      )
+    else {
+      return UITableViewCell()
+    }
+    cell.apply(model)
+    return cell
   }
 
   func fetchNews() {
