@@ -9,15 +9,8 @@ import UIKit
 import NewsUI
 import NetworkingService
 
-enum Section {
-  case main
-}
-
 final class NewsMainController: BaseController {
   var showDetails: ((ArticleModel) -> Void)?
-
-  private typealias DataSource = UITableViewDiffableDataSource<Section, ArticleModel.ID>
-  private typealias Snapshot = NSDiffableDataSourceSnapshot<Section, ArticleModel.ID>
 
   private lazy var dataSource = configureDataSource()
   private let viewModel: NewsMainViewModel
@@ -67,8 +60,8 @@ private extension NewsMainController {
     }
   }
 
-  private func configureDataSource() -> DataSource {
-    let dataSource = DataSource(
+  private func configureDataSource() -> NewsDataSource {
+    let dataSource = NewsDataSource(
       tableView: tableView
     ) { [weak self] tableView, indexPath, itemIdentifier in
       self?.cell(
@@ -152,19 +145,11 @@ private extension NewsMainController {
   }
 
   func configureSnapshot() {
-    var snapshot = Snapshot()
-    snapshot.appendSections([.main])
-    snapshot.appendItems(viewModel.articles.map { $0.id }, toSection: .main)
-    dataSource.apply(snapshot, animatingDifferences: true)
+    dataSource.configureSnapshot(with: viewModel.articles)
   }
 
   func updateSnapshot(with articles: [ArticleModel]) {
-    var snapshot = dataSource.snapshot()
-    snapshot.appendItems(
-      articles.map { $0.id },
-      toSection: .main
-    )
-    dataSource.apply(snapshot, animatingDifferences: true)
+    dataSource.updateSnapshot(with: articles)
   }
 }
 
