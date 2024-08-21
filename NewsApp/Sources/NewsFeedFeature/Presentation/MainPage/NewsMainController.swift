@@ -110,7 +110,7 @@ private extension NewsMainController {
   func fetchMoreNews() {
     showLoadingView()
     viewModel.fetchMoreNews { [weak self] result in
-      self?.handleFetchResult(result)
+      self?.handleUpdateResult(result)
     }
   }
 
@@ -119,7 +119,19 @@ private extension NewsMainController {
       self.hideLoadingView()
       switch result {
       case .success:
-        self.updateSnapshot()
+        self.configureSnapshot()
+      case .failure(let error):
+        self.showError(error)
+      }
+    }
+  }
+
+  func handleUpdateResult(_ result: Result<[ArticleModel], DataTransferError>) {
+    DispatchQueue.main.async {
+      self.hideLoadingView()
+      switch result {
+      case let .success(articles):
+        self.updateSnapshot(with: articles)
       case .failure(let error):
         self.showError(error)
       }
@@ -139,10 +151,19 @@ private extension NewsMainController {
     showAlert(alertText: "Error", alertMessage: alertMessage)
   }
 
-  func updateSnapshot() {
+  func configureSnapshot() {
     var snapshot = Snapshot()
     snapshot.appendSections([.main])
     snapshot.appendItems(viewModel.articles.map { $0.id }, toSection: .main)
+    dataSource.apply(snapshot, animatingDifferences: true)
+  }
+
+  func updateSnapshot(with articles: [ArticleModel]) {
+    var snapshot = dataSource.snapshot()
+    snapshot.appendItems(
+      articles.map { $0.id },
+      toSection: .main
+    )
     dataSource.apply(snapshot, animatingDifferences: true)
   }
 }
