@@ -8,7 +8,7 @@
 import Foundation
 import NetworkingService
 
-protocol NewsFeedRemoteDataSource {
+public protocol NewsFeedRemoteDataSource {
   func fetchNewsFeed(
     for topic: String,
     language: String,

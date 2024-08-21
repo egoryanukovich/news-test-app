@@ -11,9 +11,9 @@ import NetworkingService
 final class NewsMainViewModel {
   private let repository: NewsFeedRepository
   private(set) var currentPage = 1
-  private var totalPages = 1
+  private(set) var totalPages = 1
   private(set) var articles: [ArticleModel] = []
-  private var isFetchMorePossible: Bool {
+  var isFetchMorePossible: Bool {
     currentPage < totalPages
   }
 

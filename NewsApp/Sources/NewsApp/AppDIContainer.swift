@@ -38,7 +38,9 @@ final class AppDIContainer {
   ) throws {
     self.window = window
     self.currentCoordinator = currentCoordinator
-    if let url = URL(string: urlString) {
+    if
+      urlString.isValidUrl(),
+      let url = URL(string: urlString) {
       baseUrl = url
     } else {
       throw NewsAppError.noURL
