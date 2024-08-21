@@ -7,19 +7,19 @@
 
 import Foundation
 
-struct ArticleModel {
+struct ArticleModel: ArticleMainScreenModel {
   let title: String
   let description: String
-  let imageUrl: URL?
+  let imageUrl: URL
   let content: String
   let publishedAt: String
 }
 
 extension ArticleModel {
-  init(from model: ArticleResponseModel) {
+  init(from model: ArticleResponseModel, imageUrl: URL) {
     title = model.title
     description = model.description
-    imageUrl = URL(string: model.urlToImage ?? "")
+    self.imageUrl = imageUrl
     content = model.content
     publishedAt = model.publishedAt
   }

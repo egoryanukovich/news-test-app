@@ -21,6 +21,8 @@ private extension Module {
   func configureWindow() {
     diContainer.window.rootViewController = diContainer.navigationController
     diContainer.window.makeKeyAndVisible()
+
+    diContainer.window.overrideUserInterfaceStyle = .dark
   }
 
   func showLaunchScreen() {

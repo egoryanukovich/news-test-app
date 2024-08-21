@@ -15,6 +15,12 @@ struct NewsModel {
 extension NewsModel {
   init(from model: NewsFeedResponseModel) {
     totalResults = model.totalResults
-    articles = model.articles.map { ArticleModel(from: $0) }
+    var resultArticles: [ArticleModel] = []
+    model.articles.forEach { article in
+      if let imageURL = URL(string: article.urlToImage ?? "") {
+        resultArticles.append(ArticleModel(from: article, imageUrl: imageURL))
+      }
+    }
+    articles = resultArticles
   }
 }

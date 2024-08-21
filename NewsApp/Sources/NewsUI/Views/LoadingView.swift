@@ -9,7 +9,6 @@ import UIKit
 import SnapKit
 
 public final class LoadingView: BaseView {
-
   private lazy var activityIndicator: UIActivityIndicatorView = {
     let view = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.medium)
     view.color = .white
@@ -23,7 +22,6 @@ public final class LoadingView: BaseView {
     configureLayout()
     configureView()
   }
-
 }
 
 private extension LoadingView {

@@ -36,6 +36,10 @@ let package = Package(
       .upToNextMajor(
         from: "5.0.1"
       )
+    ),
+    .package(
+      url: "https://github.com/SDWebImage/SDWebImage.git",
+      from: "5.1.0"
     )
   ],
   targets: [
@@ -65,7 +69,8 @@ let package = Package(
       dependencies: [
         "NewsUI",
         "NewsCore",
-        "SnapKit"
+        "SnapKit",
+        "SDWebImage"
       ]
     )
   ]
