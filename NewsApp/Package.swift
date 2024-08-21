@@ -72,6 +72,25 @@ let package = Package(
         "SnapKit",
         "SDWebImage"
       ]
+    ),
+    .testTarget(
+      name: "MainPageTests",
+      dependencies: [
+        "NewsFeedFeature",
+        "NetworkingService"
+      ]
+    ),
+    .testTarget(
+      name: "NetworkingServiceTests",
+      dependencies: [
+        "NetworkingService"
+      ]
+    ),
+    .testTarget(
+      name: "NewsAppTests",
+      dependencies: [
+        "NewsApp"
+      ]
     )
   ]
 )

@@ -40,7 +40,7 @@ final class NewsDetailsView: BaseView {
 
   func apply(
     _ title: String,
-    imageUrl: URL,
+    imageUrl: URL?,
     description: String
   ) {
     titleLabel.text = title

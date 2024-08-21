@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct NewsModel {
+public struct NewsModel {
   let totalResults: Int
   let articles: [ArticleModel]
 }
@@ -15,12 +15,8 @@ struct NewsModel {
 extension NewsModel {
   init(from model: NewsFeedResponseModel) {
     totalResults = model.totalResults
-    var resultArticles: [ArticleModel] = []
-    model.articles.forEach { article in
-      if let imageURL = URL(string: article.urlToImage ?? "") {
-        resultArticles.append(ArticleModel(from: article, imageUrl: imageURL))
-      }
-    }
-    articles = resultArticles
+    articles = model.articles
+      .filter { $0.urlToImage != nil }
+      .map { ArticleModel(from: $0) }
   }
 }

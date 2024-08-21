@@ -23,7 +23,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     do {
       newsAppModule = try NewsApp.Module(
         window: window,
-        urlString: "https://newsapi.org/v2/"
+        urlString: "invalid_url_string"
       )
       newsAppModule?.launchApp()
     } catch {
