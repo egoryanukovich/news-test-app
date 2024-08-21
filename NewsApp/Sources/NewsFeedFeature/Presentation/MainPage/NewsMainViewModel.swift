@@ -36,11 +36,19 @@ final class NewsMainViewModel {
   }
 
   func fetchMoreNews(
-    resultHandler: @escaping (Result<Void, DataTransferError>) -> Void = { _ in }
+    resultHandler: @escaping (Result<[ArticleModel], DataTransferError>) -> Void = { _ in }
   ) {
     guard isFetchMorePossible else { return }
     currentPage += 1
-    fetchNewsFeed(resultHandler: resultHandler)
+    repository.fetchNewsFeed(
+      for: "Meta OR Apple OR Netflix OR Google OR Amazon",
+      language: "en",
+      page: currentPage
+    ) { [weak self] result in
+      DispatchQueue.main.async {
+        self?.handleUpdateResult(result, resultHandler: resultHandler)
+      }
+    }
   }
 
   private func handleFetchResult(
@@ -52,6 +60,20 @@ final class NewsMainViewModel {
       updateArticles(with: news.articles)
       calculateTotalPages(totalItems: news.totalResults)
       resultHandler(.success(()))
+    case let .failure(error):
+      resultHandler(.failure(error))
+    }
+  }
+
+  private func handleUpdateResult(
+    _ result: Result<NewsModel, DataTransferError>,
+    resultHandler: @escaping (Result<[ArticleModel], DataTransferError>) -> Void
+  ) {
+    switch result {
+    case let .success(news):
+      updateArticles(with: news.articles)
+      calculateTotalPages(totalItems: news.totalResults)
+      resultHandler(.success(news.articles))
     case let .failure(error):
       resultHandler(.failure(error))
     }
