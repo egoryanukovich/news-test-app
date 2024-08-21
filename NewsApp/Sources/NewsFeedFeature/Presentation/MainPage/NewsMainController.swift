@@ -10,6 +10,8 @@ import NewsUI
 import NetworkingService
 
 final class NewsMainController: BaseController {
+  var showDetails: ((ArticleModel) -> Void)?
+
   private let viewModel: NewsMainViewModel
 
   private lazy var tableView: UITableView = {
@@ -17,7 +19,9 @@ final class NewsMainController: BaseController {
     table.contentInset.top = 5.0
     table.backgroundColor = .clear
     table.separatorStyle = .none
+    table.allowsSelection = true
     table.dataSource = self
+    table.delegate = self
     table.register(
       NewsFeedCell.self,
       forCellReuseIdentifier: NewsFeedCell.identifier
@@ -58,7 +62,6 @@ final class NewsMainController: BaseController {
 
 private extension NewsMainController {
   func configureView() {
-    view.backgroundColor = .black
     title = "News"
   }
 
@@ -86,5 +89,18 @@ extension NewsMainController: UITableViewDataSource {
     else { return UITableViewCell() }
     cell.apply(model)
     return cell
+  }
+}
+
+extension NewsMainController: UITableViewDelegate {
+  func tableView(
+    _ tableView: UITableView,
+    didSelectRowAt indexPath: IndexPath
+  ) {
+    guard
+      let article = news?.articles[safe: indexPath.row]
+    else { return }
+
+    showDetails?(article)
   }
 }

@@ -43,10 +43,20 @@ private extension NewsFeedCoordinator {
       repository: feedRepository
     )
     let controller = NewsMainController(viewModel: viewModel)
-
+    controller.showDetails = { [weak self] article in
+      self?.showDetails(for: article)
+    }
     navigationController.setViewControllers(
       [controller],
       animated: false
+    )
+  }
+
+  func showDetails(for article: ArticleModel) {
+    let controller = NewsDetailsController(articleModel: article)
+    navigationController.pushViewController(
+      controller,
+      animated: true
     )
   }
 }

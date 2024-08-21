@@ -44,6 +44,10 @@ open class BaseController: UIViewController {
     )
   }
 
+  open override func viewDidLoad() {
+    super.viewDidLoad()
+    configureView()
+  }
   // MARK: - Lifecycle
   open override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
@@ -88,5 +92,11 @@ open class BaseController: UIViewController {
       }
     }
     view.isUserInteractionEnabled = true
+  }
+}
+
+private extension BaseController {
+  func configureView() {
+    view.backgroundColor = .black
   }
 }

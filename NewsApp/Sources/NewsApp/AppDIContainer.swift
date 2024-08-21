@@ -17,7 +17,7 @@ final class AppDIContainer {
   private let baseUrl: URL
   private(set) lazy var navigationController: UINavigationController = {
     let controller = UINavigationController()
-    controller.navigationBar.setupTransparentNavBar()
+    controller.navigationBar.setupBlurNavBar()
     return controller
   }()
 

@@ -53,7 +53,7 @@ let package = Package(
         "NewsFeedFeature"
       ]
     ),
-    .target(name: "NewsUI"),
+    .target(name: "NewsUI", dependencies: ["SnapKit"]),
     .target(name: "NewsCore"),
     .target(name: "NetworkingService"),
     .target(

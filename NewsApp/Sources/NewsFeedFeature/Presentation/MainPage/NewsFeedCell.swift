@@ -12,6 +12,7 @@ import SDWebImage
 final class NewsFeedCell: UITableViewCell {
   private lazy var newsImageView: UIImageView = {
     let view = UIImageView()
+    view.contentMode = .scaleAspectFit
 
     return view
   }()
@@ -33,6 +34,7 @@ final class NewsFeedCell: UITableViewCell {
 
     return view
   }()
+
   private lazy var separatorLine: BaseView = {
     let view = BaseView()
     view.backgroundColor = .gray
@@ -44,6 +46,7 @@ final class NewsFeedCell: UITableViewCell {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
     configureLayout()
     backgroundColor = .clear
+    selectionStyle = .none
   }
 
   required init?(coder: NSCoder) {
@@ -76,7 +79,8 @@ private extension NewsFeedCell {
 
     newsImageView.snp.makeConstraints { make in
       make.top.equalToSuperview().offset(8.0)
-      make.directionalHorizontalEdges.equalToSuperview().inset(16.0)
+      make.centerX.equalToSuperview()
+      make.leading.greaterThanOrEqualToSuperview().offset(16.0)
       make.height.equalTo(120.0)
     }
 
@@ -89,6 +93,7 @@ private extension NewsFeedCell {
       make.top.equalTo(titleLabel.snp.bottom).offset(4.0)
       make.directionalHorizontalEdges.equalToSuperview().inset(16.0)
     }
+
     separatorLine.snp.makeConstraints { make in
       make.top.equalTo(descriptionLabel.snp.bottom).offset(8.0)
       make.height.equalTo(1.0 / UIScreen.main.scale)

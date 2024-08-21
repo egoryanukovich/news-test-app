@@ -8,10 +8,7 @@
 import UIKit
 
 public extension UINavigationBar {
-  func setupTransparentNavBar() {
-    setBackgroundImage(UIImage(), for: .default)
-    shadowImage = UIImage()
-    isTranslucent = true
+  func setupBlurNavBar() {
     tintColor = .white
     titleTextAttributes = [
       .foregroundColor: UIColor.white,
