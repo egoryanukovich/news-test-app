@@ -43,18 +43,7 @@ final class NewsMainController: BaseController {
 
   override func singleDidAppear() {
     super.singleDidAppear()
-    showLoadingView()
-    viewModel.fetchNewsFeed { [weak self] result in
-      DispatchQueue.main.async {
-        self?.hideLoadingView()
-        switch result {
-        case .success:
-          self?.tableView.reloadData()
-        case let .failure(error):
-          self?.showError(error)
-        }
-      }
-    }
+    fetchNews()
   }
 }
 
@@ -69,6 +58,37 @@ private extension NewsMainController {
       make.edges.equalToSuperview()
     }
   }
+
+  func fetchNews() {
+    showLoadingView()
+    viewModel.fetchNewsFeed { [weak self] result in
+      DispatchQueue.main.async {
+        self?.hideLoadingView()
+        switch result {
+        case .success:
+          self?.tableView.reloadData()
+        case let .failure(error):
+          self?.showError(error)
+        }
+      }
+    }
+  }
+
+  func fetchMoreNews() {
+    showLoadingView()
+    viewModel.fetchMoreNews { [weak self] result in
+      DispatchQueue.main.async {
+        self?.hideLoadingView()
+        switch result {
+        case .success:
+          self?.tableView.reloadData()
+        case let .failure(error):
+          self?.showError(error)
+        }
+      }
+    }
+  }
+
   // TODO: show error
   func showError(_ error: DataTransferError) {
     print("EROROR")
@@ -98,7 +118,16 @@ extension NewsMainController: UITableViewDelegate {
     guard
       let article = viewModel.articles[safe: indexPath.row]
     else { return }
-
     showDetails?(article)
+  }
+
+  func tableView(
+    _ tableView: UITableView,
+    willDisplay cell: UITableViewCell,
+    forRowAt indexPath: IndexPath
+  ) {
+    if indexPath.row == viewModel.articles.count - 2 {
+      fetchMoreNews()
+    }
   }
 }
