@@ -41,7 +41,6 @@ final class NewsMainController: BaseController {
     configureLayout()
   }
 
-  private var news: NewsModel?
   override func singleDidAppear() {
     super.singleDidAppear()
     showLoadingView()
@@ -49,8 +48,7 @@ final class NewsMainController: BaseController {
       DispatchQueue.main.async {
         self?.hideLoadingView()
         switch result {
-        case let .success(news):
-          self?.news = news
+        case .success:
           self?.tableView.reloadData()
         case let .failure(error):
           self?.showError(error)
@@ -79,13 +77,13 @@ private extension NewsMainController {
 
 extension NewsMainController: UITableViewDataSource {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    news?.articles.count ?? 0
+    viewModel.articles.count
   }
 
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     guard
       let cell: NewsFeedCell = tableView.dequeueCell(for: indexPath),
-      let model = news?.articles[safe: indexPath.row]
+      let model = viewModel.articles[safe: indexPath.row]
     else { return UITableViewCell() }
     cell.apply(model)
     return cell
@@ -98,7 +96,7 @@ extension NewsMainController: UITableViewDelegate {
     didSelectRowAt indexPath: IndexPath
   ) {
     guard
-      let article = news?.articles[safe: indexPath.row]
+      let article = viewModel.articles[safe: indexPath.row]
     else { return }
 
     showDetails?(article)
