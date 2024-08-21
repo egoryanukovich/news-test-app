@@ -16,8 +16,6 @@ public class Endpoint<R>: ResponseRequestable {
   public var headerParameters: [String: String]
   public var queryParametersEncodable: Encodable?
   public var queryParameters: [String: Any]
-  public var bodyParametersEncodable: Encodable?
-  public var bodyParameters: [String: Any]
 
   public init(
     path: String,
@@ -25,9 +23,7 @@ public class Endpoint<R>: ResponseRequestable {
     method: HTTPMethodType,
     headerParameters: [String: String] = [:],
     queryParametersEncodable: Encodable? = nil,
-    queryParameters: [String: Any] = [:],
-    bodyParametersEncodable: Encodable? = nil,
-    bodyParameters: [String: Any] = [:]
+    queryParameters: [String: Any] = [:]
   ) {
     self.path = path
     self.isFullPath = isFullPath
@@ -35,8 +31,6 @@ public class Endpoint<R>: ResponseRequestable {
     self.headerParameters = headerParameters
     self.queryParametersEncodable = queryParametersEncodable
     self.queryParameters = queryParameters
-    self.bodyParametersEncodable = bodyParametersEncodable
-    self.bodyParameters = bodyParameters
   }
 }
 
@@ -47,12 +41,6 @@ extension Requestable {
     var allHeaders: [String: String] = config.headers
     headerParameters.forEach { allHeaders.updateValue($1, forKey: $0) }
 
-    let bodyParameters = try bodyParametersEncodable?.toDictionary() ?? self.bodyParameters
-    if !bodyParameters.isEmpty {
-      urlRequest.httpBody = encodeBody(
-        bodyParamaters: bodyParameters
-      )
-    }
     urlRequest.httpMethod = method.rawValue
     urlRequest.allHTTPHeaderFields = allHeaders
     return urlRequest

@@ -14,8 +14,6 @@ public protocol Requestable {
   var headerParameters: [String: String] { get }
   var queryParametersEncodable: Encodable? { get }
   var queryParameters: [String: Any] { get }
-  var bodyParametersEncodable: Encodable? { get }
-  var bodyParameters: [String: Any] { get }
 
   func urlRequest(with networkConfig: NetworkConfigurable) throws -> URLRequest
 }
