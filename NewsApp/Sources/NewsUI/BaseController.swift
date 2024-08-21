@@ -65,4 +65,28 @@ open class BaseController: UIViewController {
 
   open func singleWillAppear() {}
   open func singleDidAppear() {}
+
+  @MainActor
+  public func showLoadingView() {
+    let loadingView = LoadingView()
+    loadingView.tag = Constants.loadingViewTag
+
+    view.addSubview(loadingView)
+
+    loadingView.snp.makeConstraints { make in
+      make.edges.equalToSuperview()
+      make.size.equalToSuperview()
+    }
+    view.isUserInteractionEnabled = false
+  }
+
+  @MainActor
+  public func hideLoadingView() {
+    view.subviews.forEach { subview in
+      if subview.tag == Constants.loadingViewTag {
+        subview.removeFromSuperview()
+      }
+    }
+    view.isUserInteractionEnabled = true
+  }
 }

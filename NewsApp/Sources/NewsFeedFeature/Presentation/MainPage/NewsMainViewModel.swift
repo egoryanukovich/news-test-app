@@ -6,29 +6,26 @@
 //
 
 import Foundation
-
+import NetworkingService
 
 final class NewsMainViewModel {
   private let repository: NewsFeedRepository
-  private(set) var page = 1
+  private(set) var currentPage = 1
 
   init(repository: NewsFeedRepository) {
     self.repository = repository
   }
 
-  func fetchNewsFeed() {
+  func fetchNewsFeed(
+    resultHandler: @escaping (Result<NewsModel, DataTransferError>) -> Void = { _ in }
+  ) {
     repository.fetchNewsFeed(
       for: "Meta OR Apple OR Netflix OR Google OR Amazon",
       language: "en",
-      page: page
+      page: currentPage
     ) { [weak self] result in
-      switch result {
-      case let .success(news):
-        self?.page = news.totalResults
-        print(news.totalResults)
-      case let .failure(error):
-        print(error)
-      }
+      self?.currentPage = 2
+      resultHandler(result)
     }
   }
 }
